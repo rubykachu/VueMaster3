@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VueMaster 3</title>
+
+  <!-- Import CSS -->
+  <link rel="stylesheet" href="assets/style.css">
+
+  <!-- Import Vue3 -->
+  <script src="https://unpkg.com/vue@3.0.0-beta.12/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <div class="nav-bar"></div>
+    <div class="cart">Cart({{ totalCart }}) [{{ showProductIds }}]</div>
+
+    <display-product :premium="premium" @add-to-cart="updateCart"></display-product>
+    <review-list :reviews="reviews"></review-list>
+    <review-form @submit-review="submitReview"></review-form>
+  </div>
+
+  <script src="./main.js"></script>
+  <script src="./components/displayProductComponent.js"></script>
+  <script src="./components/detailProductComponent.js"></script>
+  <script src="./components/reviewFormComponent.js"></script>
+  <script src="./components/reviewListComponent.js"></script>
+  <script>
+    const mountedApp = app.mount('#app')
+  </script>
+</body>
+
+</html>
