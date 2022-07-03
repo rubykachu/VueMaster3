@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <router-link :to="{ name: 'HomeView' }">Home</router-link> |
+    <router-link :to="{ name: 'EventList' }">Home</router-link> |
     <router-link :to="{ name: 'AboutView' }">About</router-link>
   </nav>
   <router-view/>

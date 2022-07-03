@@ -1,12 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '@/views/HomeView.vue'
-import EventDetail from '@/components/EventDetail.vue'
+import EventList from '@/views/events/EventList.vue'
+import EventDetail from '@/views/events/EventDetail.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'HomeView',
-    component: HomeView
+    name: 'EventList',
+    component: EventList,
+    props: route => ({ page: parseInt(route.query.page) || 1 })
+  },
+  {
+    path: '/events/:id',
+    name: 'EventDetail',
+    component: EventDetail,
+    props: true
   },
   {
     path: '/about',
@@ -16,12 +23,6 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '@/views/AboutView.vue')
   },
-  {
-    path: '/event/:id',
-    name: 'EventDetail',
-    component: EventDetail,
-    props: true
-  }
 ]
 
 const router = createRouter({
