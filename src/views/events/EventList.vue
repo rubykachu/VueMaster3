@@ -19,7 +19,9 @@
 <script>
 import EventCart from '@/components/EventCart.vue'
 import EventRequest from '@/requests/EventRequest.js'
-import { watchEffect } from '@vue/runtime-core'
+import NProgress from 'nprogress'
+
+const PERPAGE = 1;
 
 export default {
   name: 'EventList',
@@ -31,21 +33,42 @@ export default {
     return {
       events: [],
       totalEvents: 0,
-      perPage: 1
     }
   },
-  created() {
-    watchEffect(() => {
-      this.events = null
-      EventRequest.getEvents(this.perPage, this.page)
-        .then(response => {
-          this.events = response.data
-          this.totalEvents = response.headers['x-total-count']
+  beforeRouteEnter(routeTo, _, next) {
+    NProgress.start()
+
+    EventRequest.getEvents(PERPAGE, parseInt(routeTo.query.page) || 1)
+      .then(response => {
+        next(comp => {
+          comp.events = response.data
+          comp.totalEvents = response.headers['x-total-count']
         })
-        .catch(error => {
-          alert(error)
-        })
-    })
+      })
+      .catch(error => {
+        alert(error)
+        next({ name: 'NetworkError' })
+      })
+      .finally(() => {
+        NProgress.done()
+      })
+  },
+  beforeRouteUpdate(routeTo, _, next) {
+    NProgress.start()
+
+    EventRequest.getEvents(PERPAGE, parseInt(routeTo.query.page) || 1)
+      .then(response => {
+        this.events = response.data
+        this.totalEvents = response.headers['x-total-count']
+        next()
+      })
+      .catch(error => {
+        alert(error)
+        next({ name: 'NetworkError' })
+      })
+      .finally(() => {
+        NProgress.done()
+      })
   },
   computed: {
     hasPrevPage() {
@@ -53,7 +76,7 @@ export default {
     },
     hasNextPage() {
       // First, calculate total pages
-      const totalPages = Math.ceil(this.totalEvents / this.perPage) // 2 is events per page
+      const totalPages = Math.ceil(this.totalEvents / PERPAGE) // 2 is events per page
 
       // Then check to see if the current page is less than the total pages.
       return this.page < totalPages
