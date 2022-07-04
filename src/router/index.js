@@ -19,6 +19,7 @@ const routes = [
     name: 'EventLayout',
     component: EventLayout,
     props: true,
+    meta: { requireAuth: true },
     children: [
       {
         path: '',
@@ -72,7 +73,15 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
+  // Dùng khi cuộn đến cuối trang, thì click trang tiếp theo thì nhảy lên đầu trang
+  // savedPosition: Dùng khi back Browser thì sẽ về lại đúng vị trí trước đó
+  scrollBehavior(_to, _from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0 }
+    }
+  }
 })
-
 export default router

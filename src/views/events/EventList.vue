@@ -19,7 +19,6 @@
 <script>
 import EventCart from '@/components/EventCart.vue'
 import EventRequest from '@/requests/EventRequest.js'
-import NProgress from 'nprogress'
 
 const PERPAGE = 1;
 
@@ -36,8 +35,6 @@ export default {
     }
   },
   beforeRouteEnter(routeTo, _, next) {
-    NProgress.start()
-
     EventRequest.getEvents(PERPAGE, parseInt(routeTo.query.page) || 1)
       .then(response => {
         next(comp => {
@@ -49,13 +46,8 @@ export default {
         alert(error)
         next({ name: 'NetworkError' })
       })
-      .finally(() => {
-        NProgress.done()
-      })
   },
   beforeRouteUpdate(routeTo, _, next) {
-    NProgress.start()
-
     EventRequest.getEvents(PERPAGE, parseInt(routeTo.query.page) || 1)
       .then(response => {
         this.events = response.data
@@ -65,9 +57,6 @@ export default {
       .catch(error => {
         alert(error)
         next({ name: 'NetworkError' })
-      })
-      .finally(() => {
-        NProgress.done()
       })
   },
   computed: {
