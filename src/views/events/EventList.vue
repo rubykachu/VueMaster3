@@ -38,13 +38,13 @@ export default {
     watchEffect(() => {
       this.events = null
       EventRequest.getEvents(this.perPage, this.page)
-                  .then(response => {
-                    this.events = response.data
-                    this.totalEvents = response.headers['x-total-count']
-                  })
-                  .catch(error => {
-                    alert(error)
-                  })
+        .then(response => {
+          this.events = response.data
+          this.totalEvents = response.headers['x-total-count']
+        })
+        .catch(error => {
+          alert(error)
+        })
     })
   },
   computed: {
