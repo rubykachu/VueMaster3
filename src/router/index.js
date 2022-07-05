@@ -4,6 +4,7 @@ import EventLayout from '@/views/events/EventLayout.vue'
 import EventDetail from '@/views/events/EventDetail.vue'
 import EventRegister from '@/views/events/EventRegister.vue'
 import EventEdit from '@/views/events/EventEdit.vue'
+import EventNew from '@/views/events/EventNew.vue'
 import NotFound from '@/views/NotFound.vue'
 import NetworkError from '@/views/NetworkError.vue'
 
@@ -37,6 +38,11 @@ const routes = [
         component: EventEdit,
       },
     ]
+  },
+  {
+    path: '/events/new',
+    name: 'EventNew',
+    component: EventNew
   },
   // Alias Router
   {
