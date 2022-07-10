@@ -7,14 +7,22 @@
     <router-link :to="{ name: 'EventList' }">Home</router-link> |
     <router-link :to="{ name: 'AboutView' }">About</router-link> |
     <router-link :to="{ name: 'EventNew' }">Create Event</router-link>
+
+    <p>Logged in as {{ userStore.firstName }}</p>
   </nav>
   <router-view/>
 </template>
 
 <script>
-  export default {
-    inject: ['GStore']
-  }
+import { useUserStore } from './store/storage/UserStore'
+
+export default {
+  setup() {
+    const userStore = useUserStore()
+    return { userStore }
+  },
+  inject: ['GStore']
+}
 </script>
 <style>
 #app {

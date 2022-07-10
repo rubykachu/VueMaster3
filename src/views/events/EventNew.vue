@@ -38,7 +38,7 @@
 
 <script>
 import { v4 as uuidv4 } from 'uuid'
-import { mapActions } from 'vuex'
+import { useEventStore } from '@/store/storage/EventStore'
 
 export default {
   data() {
@@ -64,17 +64,20 @@ export default {
       }
     }
   },
+  setup() {
+    const eventStore = useEventStore()
+    return { eventStore }
+  },
   methods: {
-    ...mapActions('event', ['createEvent']),
     onSubmit() {
       const event = {
         ...this.event,
-        organizer: this.$store.state.user,
+        organizer: this.eventStore.organizer,
         id: uuidv4()
       }
 
       // this.$store.dispatch('createEvent', event)
-      this.createEvent(event)
+      this.eventStore.createEvent(event)
         .then(() => {
           this.$router.push({ name: 'EventDetail', params: { id: event.id } })
         })
