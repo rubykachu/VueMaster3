@@ -13,6 +13,7 @@
 
 <script>
 // import EventRequest from '@/requests/EventRequest.js'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'EventDetail',
@@ -21,7 +22,8 @@ export default {
     return {}
   },
   created() {
-    this.$store.dispatch('fetchEvent', this.id)
+    // this.$store.dispatch('fetchEvent', this.id)
+    this.fetchEvent(this.id)
       .catch(e => {
         this.$router.push({ name: 'ErrorDisplay', params: { error: e } })
       })
@@ -37,6 +39,9 @@ export default {
     //       this.$router.push({ name: 'NetworkError' })
     //     }
     //   })
+  },
+  methods: {
+    ...mapActions(['fetchEvent'])
   },
   computed: {
     event() {

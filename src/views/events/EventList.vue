@@ -1,5 +1,5 @@
 <template>
-  <h1>Events For Good</h1>
+  <h1>Events For {{ user }}</h1>
 
   <div class="events">
     <EventCart v-for="(event, index) in events" :key="index" :event="event"/>
@@ -19,6 +19,7 @@
 <script>
 import { watchEffect } from 'vue'
 import EventCart from '@/components/EventCart.vue'
+import { mapState, mapActions } from 'vuex'
 
 const PERPAGE = 2
 
@@ -33,7 +34,8 @@ export default {
   },
   created() {
     watchEffect(() => {
-      this.$store.dispatch('fetchEvents', this.page)
+      // this.$store.dispatch('fetchEvents', this.page)
+      this.fetchEvents(this.page)
           .catch(error => {
             this.$router.push({
               name: 'ErrorDisplay',
@@ -42,7 +44,11 @@ export default {
         })
     })
   },
+  methods: {
+    ...mapActions(['fetchEvents'])
+  },
   computed: {
+    ...mapState(['user', 'events', 'totalEvents']),
     hasPrevPage() {
       return this.page != 1
     },
@@ -53,12 +59,6 @@ export default {
       // Then check to see if the current page is less than the total pages.
       return this.page < totalPages
     },
-    events() {
-      return this.$store.state.events
-    },
-    totalEvents() {
-      return this.$store.state.totalEvents
-    }
   }
 }
 </script>
