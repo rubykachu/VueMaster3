@@ -10,6 +10,9 @@ export default {
     totalEvents: 0
   },
   getters: {
+    countEvents(state) {
+      return state.events.length
+    }
   },
   mutations: {
     ADD_EVENT(state, event) {

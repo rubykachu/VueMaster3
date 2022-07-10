@@ -23,7 +23,6 @@ export default {
   },
   created() {
     // this.$store.dispatch('fetchEvent', this.id)
-    console.log(this.id)
     this.fetchEvent(this.id)
       .catch(e => {
         this.$router.push({ name: 'ErrorDisplay', params: { error: e } })

@@ -1,5 +1,5 @@
 <template>
-  <h1>Events For {{ user.userInfo.name }}</h1>
+  <h1>{{ countEvents }} Events For {{ user.userInfo.name }}</h1>
 
   <div class="events">
     <EventCart v-for="(event, index) in event.events" :key="index" :event="event"/>
@@ -19,7 +19,7 @@
 <script>
 import { watchEffect } from 'vue'
 import EventCart from '@/components/EventCart.vue'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 const PERPAGE = 2
 
@@ -49,6 +49,7 @@ export default {
   },
   computed: {
     ...mapState(['user', 'event', 'totalEvents']),
+    ...mapGetters('event', ['countEvents']),
     hasPrevPage() {
       return this.page != 1
     },
