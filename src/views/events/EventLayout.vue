@@ -1,50 +1,30 @@
 <template>
-  <div v-if="event">
-    <h1>{{ event.title }}</h1>
+  <div v-if="eventStore.currentEvent">
     <div id="nav">
       <router-link :to="{ name: 'EventDetail' }" >Detail</router-link>
       <router-link :to="{ name: 'EventRegister' }" >Register</router-link> |
       <router-link :to="{ name: 'EventEdit' }" >Edit</router-link>
     </div>
 
-    <router-view :event="event.currentEvent"></router-view>
+    <router-view :event="eventStore.currentEvent"></router-view>
   </div>
 </template>
 
 <script>
-// import EventRequest from '@/requests/EventRequest.js'
-import { mapState, mapActions } from 'vuex'
+import { useEventStore } from '@/store/storage/EventStore'
 
 export default {
   name: 'EventDetail',
   props: ['id'],
-  data() {
-    return {}
+  setup() {
+    const eventStore = useEventStore()
+    return { eventStore }
   },
   created() {
-    // this.$store.dispatch('fetchEvent', this.id)
-    this.fetchEvent(this.id)
+    this.eventStore.fetchEvent(this.id)
       .catch(e => {
         this.$router.push({ name: 'ErrorDisplay', params: { error: e } })
       })
-    // EventRequest.getDetailEvent(this.id)
-    //   .then(response => {
-    //     this.event = response.data
-    //   })
-    //   .catch(e => {
-    //     console.log(e)
-    //     if (e.response && e.response.status == 404) {
-    //       this.$router.push({ name: '404Resource', params: { resource: 'event' } })
-    //     } else {
-    //       this.$router.push({ name: 'NetworkError' })
-    //     }
-    //   })
-  },
-  methods: {
-    ...mapActions('event', ['fetchEvent'])
-  },
-  computed: {
-    ...mapState(['event'])
   }
 }
 </script>

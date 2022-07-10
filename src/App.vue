@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { useUserStore } from './store/UserStore'
+import { useUserStore } from './store/storage/UserStore'
 
 export default {
   setup() {

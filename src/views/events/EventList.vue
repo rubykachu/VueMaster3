@@ -1,8 +1,8 @@
 <template>
-  <h1>{{ countEvents }} Events For {{ user.userInfo.name }}</h1>
+  <h1>{{ eventStore.countEvents }} Events For {{ userStore.name }}</h1>
 
   <div class="events">
-    <EventCart v-for="(event, index) in event.events" :key="index" :event="event"/>
+    <EventCart v-for="(event, index) in eventStore.events" :key="index" :event="event"/>
 
     <div class="pagination">
       <router-link rel="prev" id="page-prev" v-if="hasPrevPage" :to="{ name: 'EventList', query: { page: page - 1 }  }">
@@ -19,7 +19,8 @@
 <script>
 import { watchEffect } from 'vue'
 import EventCart from '@/components/EventCart.vue'
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { useEventStore } from '@/store/storage/EventStore'
+import { useUserStore } from '@/store/storage/UserStore'
 
 const PERPAGE = 2
 
@@ -32,10 +33,14 @@ export default {
   data() {
     return { }
   },
+  setup() {
+    const eventStore = useEventStore()
+    const userStore = useUserStore()
+    return { eventStore, userStore }
+  },
   created() {
     watchEffect(() => {
-      // this.$store.dispatch('fetchEvents', this.page)
-      this.fetchEvents(this.page)
+      this.eventStore.fetchEvents(this.page)
           .catch(error => {
             this.$router.push({
               name: 'ErrorDisplay',
@@ -44,18 +49,13 @@ export default {
         })
     })
   },
-  methods: {
-    ...mapActions('event', ['fetchEvents'])
-  },
   computed: {
-    ...mapState(['user', 'event', 'totalEvents']),
-    ...mapGetters('event', ['countEvents']),
     hasPrevPage() {
       return this.page != 1
     },
     hasNextPage() {
       // First, calculate total pages
-      const totalPages = Math.ceil(this.event.totalEvents / PERPAGE) // 2 is events per page
+      const totalPages = Math.ceil(this.eventStore.totalEvents / PERPAGE) // 2 is events per page
 
       // Then check to see if the current page is less than the total pages.
       return this.page < totalPages
