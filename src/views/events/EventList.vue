@@ -17,10 +17,10 @@
 </template>
 
 <script>
+import { watchEffect } from 'vue'
 import EventCart from '@/components/EventCart.vue'
-import EventRequest from '@/requests/EventRequest.js'
 
-const PERPAGE = 1;
+const PERPAGE = 2
 
 export default {
   name: 'EventList',
@@ -29,35 +29,18 @@ export default {
   },
   props: ['page'],
   data() {
-    return {
-      events: [],
-      totalEvents: 0,
-    }
+    return { }
   },
-  beforeRouteEnter(routeTo, _, next) {
-    EventRequest.getEvents(PERPAGE, parseInt(routeTo.query.page) || 1)
-      .then(response => {
-        next(comp => {
-          comp.events = response.data
-          comp.totalEvents = response.headers['x-total-count']
+  created() {
+    watchEffect(() => {
+      this.$store.dispatch('fetchEvents', this.page)
+          .catch(error => {
+            this.$router.push({
+              name: 'ErrorDisplay',
+              params: { error: error }
+            })
         })
-      })
-      .catch(error => {
-        alert(error)
-        next({ name: 'NetworkError' })
-      })
-  },
-  beforeRouteUpdate(routeTo, _, next) {
-    EventRequest.getEvents(PERPAGE, parseInt(routeTo.query.page) || 1)
-      .then(response => {
-        this.events = response.data
-        this.totalEvents = response.headers['x-total-count']
-        next()
-      })
-      .catch(error => {
-        alert(error)
-        next({ name: 'NetworkError' })
-      })
+    })
   },
   computed: {
     hasPrevPage() {
@@ -69,6 +52,12 @@ export default {
 
       // Then check to see if the current page is less than the total pages.
       return this.page < totalPages
+    },
+    events() {
+      return this.$store.state.events
+    },
+    totalEvents() {
+      return this.$store.state.totalEvents
     }
   }
 }

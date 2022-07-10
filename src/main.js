@@ -16,7 +16,8 @@ createApp(App)
 router.beforeEach((to, _from) => { // eslint-disable-line
   NProgress.start()
 
-  const notAuthorized = true
+  // const notAuthorized = true
+  const notAuthorized = false
   // nếu Resource có yêu cầu Authorize
   // và giả sử như set authorize = false thì thông báo xác thực
   if (to.meta.requireAuth && notAuthorized) {

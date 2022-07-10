@@ -7,6 +7,7 @@ import EventEdit from '@/views/events/EventEdit.vue'
 import EventNew from '@/views/events/EventNew.vue'
 import NotFound from '@/views/NotFound.vue'
 import NetworkError from '@/views/NetworkError.vue'
+import ErrorDisplay from '@/views/ErrorDisplay.vue'
 
 const routes = [
   {
@@ -74,6 +75,12 @@ const routes = [
     path: '/network-error',
     name: 'NetworkError',
     component: NetworkError,
+  },
+  {
+    path: '/error/:error',
+    name: 'ErrorDisplay',
+    props: true,
+    component: ErrorDisplay,
   }
 ]
 

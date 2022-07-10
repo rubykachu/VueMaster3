@@ -12,27 +12,36 @@
 </template>
 
 <script>
-import EventRequest from '@/requests/EventRequest.js'
+// import EventRequest from '@/requests/EventRequest.js'
 
 export default {
   name: 'EventDetail',
   props: ['id'],
   data() {
-    return { event: null }
+    return {}
   },
   created() {
-    EventRequest.getDetailEvent(this.id)
-      .then(response => {
-        this.event = response.data
-      })
+    this.$store.dispatch('fetchEvent', this.id)
       .catch(e => {
-        console.log(e)
-        if (e.response && e.response.status == 404) {
-          this.$router.push({ name: '404Resource', params: { resource: 'event' } })
-        } else {
-          this.$router.push({ name: 'NetworkError' })
-        }
+        this.$router.push({ name: 'ErrorDisplay', params: { error: e } })
       })
+    // EventRequest.getDetailEvent(this.id)
+    //   .then(response => {
+    //     this.event = response.data
+    //   })
+    //   .catch(e => {
+    //     console.log(e)
+    //     if (e.response && e.response.status == 404) {
+    //       this.$router.push({ name: '404Resource', params: { resource: 'event' } })
+    //     } else {
+    //       this.$router.push({ name: 'NetworkError' })
+    //     }
+    //   })
+  },
+  computed: {
+    event() {
+      return this.$store.state.currentEvent
+    }
   }
 }
 </script>
