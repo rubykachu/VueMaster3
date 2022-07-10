@@ -1,8 +1,8 @@
 <template>
-  <h1>Events For {{ user }}</h1>
+  <h1>Events For {{ user.userInfo.name }}</h1>
 
   <div class="events">
-    <EventCart v-for="(event, index) in events" :key="index" :event="event"/>
+    <EventCart v-for="(event, index) in event.events" :key="index" :event="event"/>
 
     <div class="pagination">
       <router-link rel="prev" id="page-prev" v-if="hasPrevPage" :to="{ name: 'EventList', query: { page: page - 1 }  }">
@@ -45,16 +45,16 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['fetchEvents'])
+    ...mapActions('event', ['fetchEvents'])
   },
   computed: {
-    ...mapState(['user', 'events', 'totalEvents']),
+    ...mapState(['user', 'event', 'totalEvents']),
     hasPrevPage() {
       return this.page != 1
     },
     hasNextPage() {
       // First, calculate total pages
-      const totalPages = Math.ceil(this.totalEvents / PERPAGE) // 2 is events per page
+      const totalPages = Math.ceil(this.event.totalEvents / PERPAGE) // 2 is events per page
 
       // Then check to see if the current page is less than the total pages.
       return this.page < totalPages

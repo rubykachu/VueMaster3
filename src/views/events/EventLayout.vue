@@ -7,13 +7,13 @@
       <router-link :to="{ name: 'EventEdit' }" >Edit</router-link>
     </div>
 
-    <router-view :event="event"></router-view>
+    <router-view :event="event.currentEvent"></router-view>
   </div>
 </template>
 
 <script>
 // import EventRequest from '@/requests/EventRequest.js'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'EventDetail',
@@ -23,6 +23,7 @@ export default {
   },
   created() {
     // this.$store.dispatch('fetchEvent', this.id)
+    console.log(this.id)
     this.fetchEvent(this.id)
       .catch(e => {
         this.$router.push({ name: 'ErrorDisplay', params: { error: e } })
@@ -41,12 +42,10 @@ export default {
     //   })
   },
   methods: {
-    ...mapActions(['fetchEvent'])
+    ...mapActions('event', ['fetchEvent'])
   },
   computed: {
-    event() {
-      return this.$store.state.currentEvent
-    }
+    ...mapState(['event'])
   }
 }
 </script>
